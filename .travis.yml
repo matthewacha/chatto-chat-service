@@ -1,0 +1,32 @@
+sudo: required
+language: node_js
+node_js:
+  - "11.6.0"
+services:
+  - docker
+before_install:
+  # install heroku cli
+  - wget -qO- https://toolbelt.heroku.com/install.sh | sh
+  # login to docker registries (dockerhub + heroku)
+  - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+  - docker login --username $HEROKU_USERNAME --password $HEROKU_API_KEY registry.heroku.com
+install:
+  # install deps
+  - yarn install
+script:
+  #- yarn test
+  #- yarn build
+  # build docker images
+  - docker image build -t $HEROKU_APP_NAME .
+  - docker images
+  - docker tag $HEROKU_APP_NAME $DOCKER_USERNAME/$HEROKU_APP_NAME
+  - docker tag $HEROKU_APP_NAME registry.heroku.com/$HEROKU_APP_NAME/web
+  - docker push registry.heroku.com/$HEROKU_APP_NAME/web
+  - docker push $DOCKER_USERNAME/$HEROKU_APP_NAME
+  - heroku stack:set container -a $HEROKU_APP_NAME
+deploy:
+  provider: script
+  script:
+    # run container in heroku
+    heroku container:release web -a $HEROKU_APP_NAME
+  branch: master

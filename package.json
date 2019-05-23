@@ -1,0 +1,22 @@
+{
+  "name": "chatto-chat-service",
+  "version": "1.0.0",
+  "description": "This is the chat service for chatto",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "keywords": [
+    "chat",
+    "service"
+  ],
+  "author": "Matthew Wacha",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.0.0",
+    "express": "^4.17.0",
+    "passport": "^0.4.0"
+  }
+}
